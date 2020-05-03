@@ -4,7 +4,7 @@ import "fmt"
 
 type BaseError struct {
 	Operation string
-	Message string
+	Message   string
 }
 
 func (e *BaseError) Error() string {
