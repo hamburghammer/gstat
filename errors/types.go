@@ -2,6 +2,7 @@ package errors
 
 import "fmt"
 
+// BaseError is a custom error with some extra fields.
 type BaseError struct {
 	Operation string
 	Message   string
