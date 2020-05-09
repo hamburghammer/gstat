@@ -3,11 +3,16 @@ package main
 import (
 	"fmt"
 
-	"github.com/hamburghammer/gstat/args"
+	"github.com/hamburghammer/gstat/proc"
+	"github.com/shirou/gopsutil/cpu"
 )
 
 func main() {
 	fmt.Println("Hello, World!")
-	args := args.Parse()
-	fmt.Printf("Parsed args:\n	%+v\n", args)
+
+	totalCPUCannel := make(chan float64)
+	go proc.TotalCPU(totalCPUCannel, cpu.Percent)
+
+	totalCPU := <-totalCPUCannel
+	fmt.Printf("from the channel: %f\n", totalCPU)
 }
