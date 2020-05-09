@@ -3,6 +3,7 @@ package args
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/jessevdk/go-flags"
 
@@ -15,23 +16,27 @@ type Arguments struct {
 	Mem       bool   `short:"m" long:"mem" description:"Include the total RAM consumption"`
 	Disk      bool   `short:"d" long:"disk" description:"Include the total CPU consumption"`
 	Processes bool   `short:"p" long:"proc" description:"Include the top 10 processes"`
-	Health    string `long:"health" description:"Make a healthcheck call"`
+	Health    string `long:"health" description:"Make a healthcheck call against the URI"`
 	rest      []string
 }
+
+// Validate the arguments.
+func (a *Arguments) Validate() []error {
+	validationErrors := make([]error, 1)
+	return append(validationErrors, errors.New("Validate not impmented jet"))
+}
+
+// OperationKeyValidation represents the key for the Operation field of an ValidationError
+const OperationKeyValidation = "Validation"
 
 // ValidationError is a struct to wrap the error with more information.
 type ValidationError struct {
 	e.BaseError
-	Argument string
+	Arguments
 }
 
 func (ve *ValidationError) Error() string {
-	return fmt.Sprintf("%s of the argument %s failed: %s", ve.Operation, ve.Argument, ve.Message)
-}
-
-// Validate the arguments.
-func (a *Arguments) Validate() error {
-	return errors.New("Validate not impmented jet")
+	return fmt.Sprintf("%s of the arguments %+v failed: %s", ve.Operation, ve.Arguments, ve.Message)
 }
 
 // Parse the flags to the Arguments struct.
@@ -47,4 +52,22 @@ func Parse() Arguments {
 
 	fmt.Printf("Return value from parsing args: %v \n", re)
 	return args
+}
+
+func newValidationError(args Arguments, message string) ValidationError {
+	return ValidationError{e.BaseError{Operation: "Validation", Message: message}, args}
+}
+
+func uriValidate(uri string) error {
+	scheme := strings.Split(uri, "://")
+
+	if len(scheme) < 2 {
+		return errors.New("The URI does not looks like schema://provider")
+	}
+
+	if len(strings.Split(scheme[1], ".")) < 2 {
+		return errors.New("The URI provider does not has a top and second level domain like example.com")
+	}
+
+	return nil
 }

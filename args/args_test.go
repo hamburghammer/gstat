@@ -1,7 +1,17 @@
-package args
+package args_test
 
-import "testing"
+import (
+	"testing"
 
-func ValidationTest(t *testing.T) {
-	// TODO: Test the validation and the parsing.
+	"github.com/hamburghammer/gstat/args"
+)
+
+func TestValidate(t *testing.T) {
+	baseError := e.baseError
+	t.Run("should error if args are empty", func(t *testing.T) {
+		arguments := args.Arguments{}
+
+		got := arguments.Validate()
+		want := args.ValidationError{}
+	})
 }
