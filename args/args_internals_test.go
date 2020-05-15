@@ -3,7 +3,6 @@ package args
 import "testing"
 
 func TestURLValidation(t *testing.T) {
-	// TODO: Test the validation and the parsing.
 
 	t.Run("URI validation test", func(t *testing.T) {
 		uri := "https://example.com"
