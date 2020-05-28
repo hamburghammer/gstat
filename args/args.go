@@ -6,8 +6,6 @@ import (
 	"strings"
 
 	"github.com/jessevdk/go-flags"
-
-	e "github.com/hamburghammer/gstat/errors"
 )
 
 // Arguments represent the flags given at program start.
@@ -21,22 +19,30 @@ type Arguments struct {
 }
 
 // Validate the arguments.
-func (a *Arguments) Validate() []error {
-	validationErrors := make([]error, 1)
-	return append(validationErrors, errors.New("Validate not impmented jet"))
+func (a *Arguments) Validate() []ValidationError {
+	validationErrors := make([]ValidationError, 0, 10)
+	validationErrors = append(validationErrors, newValidationError(*a, "Arguments are empty"))
+	return validationErrors
 }
 
-// OperationKeyValidation represents the key for the Operation field of an ValidationError
-const OperationKeyValidation = "Validation"
-
-// ValidationError is a struct to wrap the error with more information.
-type ValidationError struct {
-	e.BaseError
-	Arguments
-}
-
-func (ve *ValidationError) Error() string {
-	return fmt.Sprintf("%s of the arguments %+v failed: %s", ve.Operation, ve.Arguments, ve.Message)
+// Equals checks for field equality
+func (a Arguments) Equals(other Arguments) bool {
+	if a.CPU != other.CPU {
+		return false
+	}
+	if a.Disk != other.Disk {
+		return false
+	}
+	if a.Mem != other.Mem {
+		return false
+	}
+	if a.Processes != other.Processes {
+		return false
+	}
+	if a.Health != other.Health {
+		return false
+	}
+	return true
 }
 
 // Parse the flags to the Arguments struct.
@@ -52,10 +58,6 @@ func Parse() Arguments {
 
 	fmt.Printf("Return value from parsing args: %v \n", re)
 	return args
-}
-
-func newValidationError(args Arguments, message string) ValidationError {
-	return ValidationError{e.BaseError{Operation: "Validation", Message: message}, args}
 }
 
 func uriValidate(uri string) error {

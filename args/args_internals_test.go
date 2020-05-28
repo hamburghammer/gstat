@@ -1,8 +1,10 @@
 package args
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestURLValidation(t *testing.T) {
+func TestURIValidation(t *testing.T) {
 
 	t.Run("URI validation test", func(t *testing.T) {
 		uri := "https://example.com"
