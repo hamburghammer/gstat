@@ -19,9 +19,38 @@ type Arguments struct {
 
 // Validate the arguments.
 func (a *Arguments) Validate() []ValidationError {
-	validationErrors := make([]ValidationError, 0, 10)
-	validationErrors = append(validationErrors, newValidationError(*a, "Arguments are empty"))
+	var validationErrors = make([]ValidationError, 0, 10)
+
+	if a.Equals(Arguments{}) {
+		return append(validationErrors, newValidationError(*a, "Arguments are empty"))
+	}
+
+	err := uriValidate(a.Health)
+	if err != nil {
+		validationErrors = append(validationErrors, newValidationError(*a, err.Error()))
+	}
+
 	return validationErrors
+}
+
+// Equals checks for field equality
+func (a Arguments) Equals(other Arguments) bool {
+	if a.CPU != other.CPU {
+		return false
+	}
+	if a.Mem != other.Mem {
+		return false
+	}
+	if a.Disk != other.Disk {
+		return false
+	}
+	if a.Processes != other.Processes {
+		return false
+	}
+	if a.Health != other.Health {
+		return false
+	}
+	return true
 }
 
 // Parse the flags to the Arguments struct.
