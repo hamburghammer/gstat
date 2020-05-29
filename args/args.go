@@ -2,7 +2,6 @@ package args
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/jessevdk/go-flags"
@@ -25,38 +24,17 @@ func (a *Arguments) Validate() []ValidationError {
 	return validationErrors
 }
 
-// Equals checks for field equality
-func (a Arguments) Equals(other Arguments) bool {
-	if a.CPU != other.CPU {
-		return false
-	}
-	if a.Disk != other.Disk {
-		return false
-	}
-	if a.Mem != other.Mem {
-		return false
-	}
-	if a.Processes != other.Processes {
-		return false
-	}
-	if a.Health != other.Health {
-		return false
-	}
-	return true
-}
-
 // Parse the flags to the Arguments struct.
 func Parse() Arguments {
 
 	args := Arguments{}
 
-	re, err := flags.Parse(&args)
+	_, err := flags.Parse(&args)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("Return value from parsing args: %v \n", re)
 	return args
 }
 
