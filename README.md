@@ -3,7 +3,7 @@
 Is a tool to get the system stats in a parsable format.
 The tool is part of the competition with [Niklas](https://github.com/nhh).
 
-Checkout his solution: [cstat](https://github.com/nhh)
+Checkout his solution: [cstat](https://github.com/nhh/cstat)
 
 ## Terms of the competition
 
