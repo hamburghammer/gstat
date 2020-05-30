@@ -4,15 +4,16 @@ import (
 	"fmt"
 
 	"github.com/hamburghammer/gstat/proc"
-	"github.com/shirou/gopsutil/cpu"
 )
 
 func main() {
 	fmt.Println("Hello, World!")
 
-	totalCPUCannel := make(chan float64)
-	go proc.TotalCPU(totalCPUCannel, cpu.Percent)
+	total, err := proc.TotalCPU()
 
-	totalCPU := <-totalCPUCannel
-	fmt.Printf("from the channel: %f\n", totalCPU)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	fmt.Printf("from the channel: %f\n", total)
 }

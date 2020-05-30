@@ -3,17 +3,26 @@ package proc
 import (
 	"fmt"
 	"time"
+
+	e "github.com/hamburghammer/gstat/errors"
+	"github.com/shirou/gopsutil/cpu"
 )
 
-// TotalCPU returns the first entry from the return array form the given function
-func TotalCPU(c chan float64, cpuPercent func(interval time.Duration, percpu bool) ([]float64, error)) {
-	total, err := cpuPercent(time.Millisecond*500, false)
+// OperationKeyCPUReading represents the key for the Operation field of an CPUReadingError
+const OperationKeyCPUReading = "CPUReading"
+
+// TotalCPU returns the first entry of the return array form the given function
+func TotalCPU() (float64, error) {
+	total, err := cpu.Percent(time.Millisecond*500, false)
 
 	if err != nil {
-		fmt.Printf("Something went wrong reading the cpu: %v \n", err)
+		wrappedError := fmt.Errorf("Something went wrong reading the cpu: %w", err)
+		return float64(0), e.BaseError{Operation: OperationKeyCPUReading, Message: wrappedError.Error()}
 	}
 
-	fmt.Printf("CPU: %v\n", total)
+	if len(total) != 1 {
+		return float64(0), e.BaseError{Operation: OperationKeyCPUReading, Message: "No CPU data was found. Please check the HOST_PROC env to point to the right directory."}
+	}
 
-	c <- total[0]
+	return total[0], nil
 }
