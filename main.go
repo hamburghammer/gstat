@@ -9,7 +9,7 @@ import (
 func main() {
 	fmt.Println("Hello, World!")
 
-	total, err := commands.TotalCPU()
+	total, err := commands.NewCPU().TotalCPU()
 
 	if err != nil {
 		fmt.Print(err)
