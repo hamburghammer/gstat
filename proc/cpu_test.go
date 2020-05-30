@@ -29,14 +29,13 @@ func TestCPUTotal(t *testing.T) {
 		os.Setenv("HOST_PROC", "./testdata/empty")
 
 		_, got := TotalCPU()
-		want := "CPUReading failed because of No CPU data was found. Please check the HOST_PROC env to point to the right directory."
+		want := "CPUReading failed because of: No CPU data was found. Please check the HOST_PROC env to point to the right directory."
 
 		if got == nil {
 			t.Errorf("An error was expected but not nil")
 		}
-
 		if got.Error() != want {
-			t.Errorf("Want '%s' but got %s", want, got.Error())
+			t.Errorf("Want '%s' but got '%s'", want, got.Error())
 		}
 		os.Setenv("HOST_PROC", orig)
 	})

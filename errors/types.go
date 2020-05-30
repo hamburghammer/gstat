@@ -9,5 +9,5 @@ type BaseError struct {
 }
 
 func (e BaseError) Error() string {
-	return fmt.Sprintf("%s failed because of %s", e.Operation, e.Message)
+	return fmt.Sprintf("%s failed because of: %s", e.Operation, e.Message)
 }
