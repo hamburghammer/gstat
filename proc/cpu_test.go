@@ -1,21 +1,23 @@
 package proc
 
 import (
+	"os"
 	"testing"
-	"time"
+
+	"github.com/shirou/gopsutil/cpu"
 )
 
-func mockGetCPUTotal(interval time.Duration, percpu bool) ([]float64, error) {
-	return []float64{0.2}, nil
-}
-
 func TestCPUTotal(t *testing.T) {
+	orig := os.Getenv("HOST_PROC")
+	os.Setenv("HOST_PROC", "testdata/proc")
+
 	totalCPUCannel := make(chan float64)
-	go TotalCPU(totalCPUCannel, mockGetCPUTotal)
+	go TotalCPU(totalCPUCannel, cpu.Percent)
 	got := <-totalCPUCannel
-	want := 0.2
+	want := 0.000000
 
 	if got != want {
 		t.Errorf("want %f but got %f", want, got)
 	}
+	os.Setenv("HOST_PROC", orig)
 }
