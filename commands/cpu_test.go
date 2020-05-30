@@ -1,6 +1,7 @@
 package commands_test
 
 import (
+	"bytes"
 	"os"
 	"testing"
 
@@ -42,4 +43,21 @@ func TestCPUTotal(t *testing.T) {
 		os.Setenv("HOST_PROC", orig)
 	})
 
+}
+
+func TestExec(t *testing.T) {
+	orig := os.Getenv("HOST_PROC")
+	os.Setenv("HOST_PROC", "./testdata/proc")
+
+	got, err := commands.CPUPercentage{}.Exec()
+	want := []byte("{\"CPU\":0}")
+
+	if err != nil {
+		t.Errorf("There was an unexpected error: %s", err)
+	}
+
+	if !bytes.Equal(got[:], want[:]) {
+		t.Errorf("want: '%s' but got: '%s'", string(want), string(got))
+	}
+	os.Setenv("HOST_PROC", orig)
 }

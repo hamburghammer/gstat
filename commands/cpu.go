@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -13,13 +14,23 @@ const OperationKeyCPUReading = "CPUReading"
 
 // CPUPercentage holds the information to build the output json
 type CPUPercentage struct {
-	name    string
-	percent interface{}
+	CPU float64
 }
 
 // NewCPU creates a new cpu percentage struct
-func NewCPU() *CPUPercentage {
-	return &CPUPercentage{name: "CPU"}
+func NewCPU() CPUPercentage {
+	return CPUPercentage{}
+}
+
+// Exec gets the cpu value and maps it to the executiondata struct
+func (c CPUPercentage) Exec() ([]byte, error) {
+	total, err := TotalCPU()
+	if err != nil {
+		return []byte{}, err
+	}
+	c.CPU = total
+	fmt.Println(c)
+	return json.Marshal(c)
 }
 
 // TotalCPU returns the first entry of the return array form the given function
