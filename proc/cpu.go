@@ -11,6 +11,17 @@ import (
 // OperationKeyCPUReading represents the key for the Operation field of an CPUReadingError
 const OperationKeyCPUReading = "CPUReading"
 
+// CPUPercentage holds the information to build the output json
+type CPUPercentage struct {
+	name    string
+	percent interface{}
+}
+
+// NewCPU creates a new cpu percentage struct
+func NewCPU() *CPUPercentage {
+	return &CPUPercentage{name: "CPU"}
+}
+
 // TotalCPU returns the first entry of the return array form the given function
 func TotalCPU() (float64, error) {
 	total, err := cpu.Percent(time.Millisecond*500, false)
