@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/hamburghammer/gstat/proc"
+	"github.com/hamburghammer/gstat/commands"
 )
 
 func main() {
 	fmt.Println("Hello, World!")
 
-	total, err := proc.TotalCPU()
+	total, err := commands.TotalCPU()
 
 	if err != nil {
 		fmt.Print(err)

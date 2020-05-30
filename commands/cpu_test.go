@@ -1,8 +1,10 @@
-package proc
+package commands_test
 
 import (
 	"os"
 	"testing"
+
+	"github.com/hamburghammer/gstat/commands"
 )
 
 func TestCPUTotal(t *testing.T) {
@@ -11,7 +13,7 @@ func TestCPUTotal(t *testing.T) {
 		orig := os.Getenv("HOST_PROC")
 		os.Setenv("HOST_PROC", "./testdata/proc")
 
-		got, err := TotalCPU()
+		got, err := commands.TotalCPU()
 		want := 0.000000
 
 		if err != nil {
@@ -28,7 +30,7 @@ func TestCPUTotal(t *testing.T) {
 		orig := os.Getenv("HOST_PROC")
 		os.Setenv("HOST_PROC", "./testdata/empty")
 
-		_, got := TotalCPU()
+		_, got := commands.TotalCPU()
 		want := "CPUReading failed because of: No CPU data was found. Please check the HOST_PROC env to point to the right directory."
 
 		if got == nil {
