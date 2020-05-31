@@ -1,19 +1,13 @@
 package main
 
 import (
-	"fmt"
-
+	"github.com/hamburghammer/gstat/args"
 	"github.com/hamburghammer/gstat/commands"
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+	args := args.Parse()
 
-	total, err := commands.NewCPU().TotalCPU()
-
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	fmt.Printf("from the channel: %f\n", total)
+	result := commands.NewResult(args)
+	result.ExecCommands()
 }
