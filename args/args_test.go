@@ -18,10 +18,10 @@ func TestValidate(t *testing.T) {
 			t.Errorf("An error was expected but got '%d' errors", len(got))
 		}
 
-		gotValitaionError := got[0]
+		gotValidationError := got[0]
 
-		if gotValitaionError.Message != want {
-			t.Errorf("got error message: '%s' \n want message: '%s'", gotValitaionError.Message, want)
+		if gotValidationError.Message != want {
+			t.Errorf("got error message: '%s' \n want message: '%s'", gotValidationError.Message, want)
 		}
 
 	})
@@ -37,10 +37,10 @@ func TestValidate(t *testing.T) {
 			t.Errorf("An error was expected but got '%d' errors", len(got))
 		}
 
-		gotValitaionError := got[0]
+		gotValidationError := got[0]
 
-		if gotValitaionError.Message != want {
-			t.Errorf("got error message: '%s' \n want message: '%s'", gotValitaionError.Message, want)
+		if gotValidationError.Message != want {
+			t.Errorf("got error message: '%s' \n want message: '%s'", gotValidationError.Message, want)
 		}
 
 	})

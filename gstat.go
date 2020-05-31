@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/hamburghammer/gstat/args"
+	"github.com/hamburghammer/gstat/commands"
 )
 
 func main() {
-	fmt.Println("Hello, World!")
 	args := args.Parse()
-	fmt.Printf("Parsed args:\n	%+v\n", args)
+
+	result := commands.NewResult(args)
+	result.ExecCommands()
 }
