@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/hamburghammer/gstat/args"
 )
@@ -28,5 +29,12 @@ func (r *Result) ExecCommands() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("{%s}\n", string(cpu))
+	cpustr := rmFirstLastBracket(string(cpu))
+
+	fmt.Printf("{%s}\n", cpustr)
+}
+
+func rmFirstLastBracket(s string) string {
+	s = strings.Replace(s, "{", "", 1)
+	return strings.Replace(s, "}", "", 1)
 }
