@@ -50,6 +50,5 @@ func (c CPU) TotalCPU() (float64, error) {
 			Operation: OperationKeyCPUReading,
 			Message:   "No CPU data was found. Please check the HOST_PROC env to point to the right directory."}
 	}
-	fmt.Println(total[0])
 	return total[0], nil
 }
