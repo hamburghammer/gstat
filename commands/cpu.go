@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/hamburghammer/gstat/args"
 	e "github.com/hamburghammer/gstat/errors"
 	"github.com/shirou/gopsutil/cpu"
 )
@@ -23,7 +24,10 @@ func NewCPU() CPU {
 }
 
 // Exec gets the cpu value and maps it to the executiondata struct
-func (c CPU) Exec() ([]byte, error) {
+func (c CPU) Exec(args args.Arguments) ([]byte, error) {
+	if !args.CPU {
+		return []byte{}, nil
+	}
 	total, err := c.TotalCPU()
 	if err != nil {
 		return []byte{}, err
@@ -46,6 +50,6 @@ func (c CPU) TotalCPU() (float64, error) {
 			Operation: OperationKeyCPUReading,
 			Message:   "No CPU data was found. Please check the HOST_PROC env to point to the right directory."}
 	}
-
+	fmt.Println(total[0])
 	return total[0], nil
 }

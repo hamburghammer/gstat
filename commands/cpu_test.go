@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/hamburghammer/gstat/args"
 	"github.com/hamburghammer/gstat/commands"
 )
 
@@ -49,7 +50,7 @@ func TestExec(t *testing.T) {
 	orig := os.Getenv("HOST_PROC")
 	os.Setenv("HOST_PROC", "./testdata/proc")
 
-	got, err := commands.CPU{}.Exec()
+	got, err := commands.CPU{}.Exec(args.Arguments{CPU: true})
 	want := []byte("{\"CPU\":0}")
 
 	if err != nil {
