@@ -54,7 +54,7 @@ func (r Result) ExecCommands(executors []Executor) Result {
 		s := string(output)
 		if err != nil {
 			errors = append(errors, err)
-		} else {
+		} else if s != "" {
 			results = append(results, rmFirstLastBracket(s))
 		}
 	}

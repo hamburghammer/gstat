@@ -78,6 +78,23 @@ func TestExecCommands(t *testing.T) {
 			t.Errorf("Want: '%s' but got: '%s'", want, got.Collection.Results[0])
 		}
 	})
+
+	t.Run("should return empty result if it gets an empty byte array", func(t *testing.T) {
+		arguments := args.Arguments{}
+		result := commands.NewResult(arguments)
+
+		mE := mockExecutor{}
+		mE.mockExec = func(args.Arguments) ([]byte, error) { return make([]byte, 0), nil }
+
+		executors := []commands.Executor{mE}
+
+		got := len(result.ExecCommands(executors).Collection.Results)
+		want := 0
+
+		if got != want {
+			t.Errorf("Want: '%d' but got: '%d' entries", want, got)
+		}
+	})
 }
 
 type mockExecutor struct {
