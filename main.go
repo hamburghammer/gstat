@@ -11,7 +11,7 @@ func main() {
 	args := args.Parse()
 
 	result := commands.NewResult(args)
-	executs := []commands.Executor{commands.NewCPU(), commands.NewMem()}
+	executs := []commands.Executor{commands.NewCPU(), commands.NewMem(), commands.NewDisk()}
 	output := result.ExecCommands(executs)
 
 	fmt.Println(formatToJSON(output.Collection.Results))
