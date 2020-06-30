@@ -7,14 +7,14 @@ import (
 
 func TestRmFirstLastBracket(t *testing.T) {
 	t.Run("should remove first and last bracket", func(t *testing.T) {
-		got := rmFirstLastBracket("{test}")
+		got := rmFirstAndLastBracket("{test}")
 		want := "test"
 
 		assertEqualString(got, want, t)
 	})
 
 	t.Run("should remove first and last bracket", func(t *testing.T) {
-		got := rmFirstLastBracket("{test}{}")
+		got := rmFirstAndLastBracket("{test}{}")
 		want := "test}{"
 
 		assertEqualString(got, want, t)

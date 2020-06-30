@@ -30,7 +30,7 @@ func (c CPU) Exec(args args.Arguments) ([]byte, error) {
 	}
 	total, err := c.ReadCPUStat(time.Millisecond*time.Duration(c.TimeInMilSec), false)
 	if err != nil {
-		return []byte{}, errors.BaseError{OperationKeyCPUReading, err.Error()}
+		return []byte{}, errors.BaseError{Operation: OperationKeyCPUReading, Message: err.Error()}
 	}
 	data := struct{ CPU float64 }{CPU: total[0]}
 	return json.Marshal(data)

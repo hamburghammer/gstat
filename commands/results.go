@@ -55,7 +55,7 @@ func (r Result) ExecCommands(executors []Executor) Result {
 		if err != nil {
 			errors = append(errors, err)
 		} else if s != "" {
-			results = append(results, rmFirstLastBracket(s))
+			results = append(results, rmFirstAndLastBracket(s))
 		}
 	}
 
@@ -75,7 +75,7 @@ func (r Result) ResultEquals(otherResult Result) bool {
 	return true
 }
 
-func rmFirstLastBracket(s string) string {
+func rmFirstAndLastBracket(s string) string {
 	s = strings.Replace(s, "{", "", 1)
 	s = reverse(strings.Replace(reverse(s), "}", "", 1))
 	return s
