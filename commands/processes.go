@@ -8,14 +8,17 @@ import (
 	"github.com/shirou/gopsutil/process"
 )
 
+// Processes holds the function to get the process list
 type Processes struct {
 	ReadProcesses func() ([]*Process, error)
 }
 
+// NewProcesses is a factory ctor to build a Processes struct
 func NewProcesses() Processes {
 	return Processes{ReadProcesses: getProcesses}
 }
 
+// getProcesses maps the process.Process array to a local Process struct
 func getProcesses() ([]*Process, error) {
 	processes, err := process.Processes()
 
@@ -28,6 +31,7 @@ func getProcesses() ([]*Process, error) {
 	return p, err
 }
 
+// Exec is the implementation of the execution interface to be able to be used as a command
 func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 	if !args.Processes {
 		return []byte{}, nil
@@ -71,6 +75,7 @@ func (c byCPU) Len() int           { return len(c) }
 func (c byCPU) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
 func (c byCPU) Less(i, j int) bool { return c[i].CPU > c[j].CPU }
 
+// Process is an adapter struct for the external process struct from github.com/shirou/gopsutil/process
 type Process struct {
 	Pid        int32
 	Name       func() (string, error)
