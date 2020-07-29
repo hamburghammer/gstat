@@ -42,18 +42,9 @@ func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	processesWithCPU := make([]cpuProcess, 0, len(processes))
-	for _, process := range processes {
-		cpuPercent, err := process.CPUPercent()
-		if err != nil {
-			return []byte{}, err
-		}
-		name, err := process.Name()
-		if err != nil {
-			return []byte{}, err
-		}
-
-		processesWithCPU = append(processesWithCPU, cpuProcess{Pid: process.Pid, CPU: cpuPercent, Name: name})
+	processesWithCPU, err := getCPUInfos(processes)
+	if err != nil {
+		return []byte{}, err
 	}
 
 	sort.Sort(byCPU(processesWithCPU))
@@ -61,6 +52,23 @@ func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 	data := struct{ Processes []cpuProcess }{Processes: processesWithCPU[0:10]}
 	return json.Marshal(data)
 
+}
+
+func getCPUInfos(processes []*Process) ([]cpuProcess, error) {
+	processesWithCPU := make([]cpuProcess, 0, len(processes))
+	for _, process := range processes {
+		cpuPercent, err := process.CPUPercent()
+		if err != nil {
+			return processesWithCPU, err
+		}
+		name, err := process.Name()
+		if err != nil {
+			return processesWithCPU, err
+		}
+
+		processesWithCPU = append(processesWithCPU, cpuProcess{Pid: process.Pid, CPU: cpuPercent, Name: name})
+	}
+	return processesWithCPU, nil
 }
 
 type cpuProcess struct {
