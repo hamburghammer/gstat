@@ -42,7 +42,7 @@ func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	processesWithCPU, err := getCPUInfos(processes)
+	processesWithCPU, err := getProcessesCPUInfos(processes)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -54,21 +54,28 @@ func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 
 }
 
-func getCPUInfos(processes []*Process) ([]cpuProcess, error) {
+func getProcessesCPUInfos(processes []*Process) ([]cpuProcess, error) {
 	processesWithCPU := make([]cpuProcess, 0, len(processes))
 	for _, process := range processes {
-		cpuPercent, err := process.CPUPercent()
+		processCPUInfo, err := getProcessCPUInfos(process)
 		if err != nil {
 			return processesWithCPU, err
 		}
-		name, err := process.Name()
-		if err != nil {
-			return processesWithCPU, err
-		}
-
-		processesWithCPU = append(processesWithCPU, cpuProcess{Pid: process.Pid, CPU: cpuPercent, Name: name})
+		processesWithCPU = append(processesWithCPU, *processCPUInfo)
 	}
 	return processesWithCPU, nil
+}
+
+func getProcessCPUInfos(process *Process) (*cpuProcess, error) {
+	cpuPercent, err := process.CPUPercent()
+	if err != nil {
+		return &cpuProcess{}, err
+	}
+	name, err := process.Name()
+	if err != nil {
+		return &cpuProcess{}, err
+	}
+	return &cpuProcess{Pid: process.Pid, CPU: cpuPercent, Name: name}, nil
 }
 
 type cpuProcess struct {
