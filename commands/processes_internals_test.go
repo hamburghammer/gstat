@@ -1,6 +1,10 @@
 package commands
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestByCPULen(t *testing.T) {
 	t.Run("three item inside the array", func(t *testing.T) {
@@ -8,7 +12,7 @@ func TestByCPULen(t *testing.T) {
 		got := byCPU(array).Len()
 		want := 3
 
-		assertEqualInt(got, want, t)
+		assert.Equal(t, want, got, "they should be equal")
 	})
 
 	t.Run("one item inside the array", func(t *testing.T) {
@@ -16,15 +20,15 @@ func TestByCPULen(t *testing.T) {
 		got := byCPU(array).Len()
 		want := 1
 
-		assertEqualInt(got, want, t)
+		assert.Equal(t, want, got, "they should be equal")
 	})
 
-	t.Run("epmty array", func(t *testing.T) {
+	t.Run("empty array", func(t *testing.T) {
 		array := []cpuProcess{}
 		got := byCPU(array).Len()
 		want := 0
 
-		assertEqualInt(got, want, t)
+		assert.Equal(t, want, got, "they should be equal")
 	})
 }
 
@@ -41,9 +45,3 @@ func TestByCPULen(t *testing.T) {
 // 		}
 // 	})
 // }
-
-func assertEqualInt(got, want int, t *testing.T) {
-	if got != want {
-		t.Errorf("Want: '%d' but got: '%d'", want, got)
-	}
-}
