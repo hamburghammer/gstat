@@ -13,24 +13,6 @@ type Processes struct {
 	ReadProcesses func() ([]*Process, error)
 }
 
-// NewProcesses is a factory ctor to build a Processes struct
-func NewProcesses() Processes {
-	return Processes{ReadProcesses: getProcesses}
-}
-
-// getProcesses maps the process.Process array to a local Process struct
-func getProcesses() ([]*Process, error) {
-	processes, err := process.Processes()
-
-	p := make([]*Process, 0, len(processes))
-
-	for _, process := range processes {
-		p = append(p, &Process{Pid: process.Pid, CPUPercent: process.CPUPercent, Name: process.Name})
-	}
-
-	return p, err
-}
-
 // Exec is the implementation of the execution interface to be able to be used as a command
 func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 	if !args.Processes {
@@ -49,9 +31,34 @@ func (p Processes) Exec(args args.Arguments) ([]byte, error) {
 
 	sort.Sort(byCPU(processesWithCPU))
 
-	data := struct{ Processes []cpuProcess }{Processes: processesWithCPU[0:10]}
+	data := struct{ Processes []cpuProcess }{Processes: getFirstTenOrLess(processesWithCPU)}
 	return json.Marshal(data)
 
+}
+
+// NewProcesses is a factory ctor to build a Processes struct
+func NewProcesses() Processes {
+	return Processes{ReadProcesses: getProcesses}
+}
+
+// getProcesses maps the process.Process array to a local Process struct
+func getProcesses() ([]*Process, error) {
+	processes, err := process.Processes()
+
+	p := make([]*Process, 0, len(processes))
+
+	for _, process := range processes {
+		p = append(p, &Process{Pid: process.Pid, CPUPercent: process.CPUPercent, Name: process.Name})
+	}
+
+	return p, err
+}
+
+func getFirstTenOrLess(array []cpuProcess) []cpuProcess {
+	if len(array) >= 9 {
+		return array[0:10]
+	}
+	return array
 }
 
 func getProcessesCPUInfos(processes []*Process) ([]cpuProcess, error) {
