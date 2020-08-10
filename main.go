@@ -12,11 +12,11 @@ func main() {
 
 	result := commands.NewResult(args)
 	executs := []commands.Executor{
+		commands.NewDate(),
 		commands.NewCPU(),
 		commands.NewMem(),
 		commands.NewDisk(),
 		commands.NewProcesses(),
-		commands.NewDate(),
 	}
 	output := result.ExecCommands(executs)
 
