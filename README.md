@@ -1,6 +1,7 @@
 # gstat
 
 [![Build Status](https://cloud.drone.io/api/badges/hamburghammer/gstat/status.svg?ref=refs/heads/master)](https://cloud.drone.io/hamburghammer/gstat)
+[![Go Report Card](https://goreportcard.com/badge/github.com/hamburghammer/gstat)](https://goreportcard.com/report/github.com/hamburghammer/gstat)
 
 Is a tool to get the system stats in a parsable format.
 The tool is part of the competition with [Niklas](https://github.com/nhh).
