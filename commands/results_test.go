@@ -45,7 +45,7 @@ func TestResultEquals(t *testing.T) {
 }
 
 func TestExecCommands(t *testing.T) {
-	t.Run("should return string array without opening and closeing brackets", func(t *testing.T) {
+	t.Run("should return string array without opening and closing brackets", func(t *testing.T) {
 		arguments := args.Arguments{}
 		result := commands.NewResult(arguments)
 

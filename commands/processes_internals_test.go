@@ -123,7 +123,7 @@ func TestGetProcessesCPUInfos(t *testing.T) {
 		assert.Equal(t, want, got)
 	})
 
-	t.Run("return error directly if one happends", func(t *testing.T) {
+	t.Run("return error directly if one happens", func(t *testing.T) {
 		processes := []*Process{{Pid: 2, Name: nameFunc, CPUPercent: cpuProcessFunc}, {Pid: 1, Name: nameErrFunc, CPUPercent: cpuProcessFunc}}
 		got, gotErr := getProcessesCPUInfos(processes)
 		want := []cpuProcess{{Name: "foo", CPU: 0, Pid: 2}}
