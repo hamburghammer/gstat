@@ -41,7 +41,7 @@ func TestDiskExec(t *testing.T) {
 		}}
 
 		got, err := disk.Exec(args.Arguments{Disk: true})
-		want := "{\"Disk\":\"47/95\"}"
+		want := "{\"disk\":{\"used\":47,\"total\":95}}"
 
 		assertNoError(err, t)
 

@@ -41,7 +41,7 @@ func TestMemExec(t *testing.T) {
 		}}
 
 		got, err := disk.Exec(args.Arguments{Mem: true})
-		want := "{\"Mem\":\"47/95\"}"
+		want := "{\"mem\":{\"used\":47,\"total\":95}}"
 
 		assertNoError(err, t)
 

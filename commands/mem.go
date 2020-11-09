@@ -2,11 +2,16 @@ package commands
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/hamburghammer/gstat/args"
 	"github.com/shirou/gopsutil/mem"
 )
+
+// Memory usage representation.
+type Memory struct {
+	Used  uint64 `json:"used"`
+	Total uint64 `json:"total"`
+}
 
 // Mem holds the memory usage for the json transformation
 type Mem struct {
@@ -29,8 +34,10 @@ func (m Mem) Exec(args args.Arguments) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	usage := fmt.Sprintf("%d/%d", bytesToMegaByte(mem.Used), bytesToMegaByte(mem.Total))
-	data := struct{ Mem string }{usage}
+	usage := Memory{Used: bytesToMegaByte(mem.Used), Total: bytesToMegaByte(mem.Total)}
+	data := struct {
+		Mem Memory `json:"mem"`
+	}{usage}
 	return json.Marshal(data)
 }
 

@@ -2,7 +2,6 @@ package commands
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/hamburghammer/gstat/args"
 	goDisk "github.com/shirou/gopsutil/disk"
@@ -29,6 +28,8 @@ func (d Disk) Exec(args args.Arguments) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	data := struct{ Disk string }{Disk: fmt.Sprintf("%d/%d", bytesToMegaByte(usage.Used), bytesToMegaByte(usage.Total))}
+	data := struct {
+		Disk Memory `json:"disk"`
+	}{Disk: Memory{Used: bytesToMegaByte(usage.Used), Total: bytesToMegaByte(usage.Total)}}
 	return json.Marshal(data)
 }
