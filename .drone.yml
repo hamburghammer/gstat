@@ -2,13 +2,22 @@ kind: pipeline
 name: default
 
 steps:
-- name: test
+- name: unit-test
   image: golang
   volumes:
-  - name: deps
+  - name: cache
     path: /go
   commands:
-  - go test -cover ./...
+  - go test -coverprofile=coverage.out -covermode=count ./...
+  - go tool cover -func=coverage.out | grep total
+
+- name: race-test
+  image: golang
+  volumes:
+  - name: cache
+    path: /go
+  commands:
+  - go test -race ./...
 
 - name: build
   image: golang
@@ -16,8 +25,8 @@ steps:
   - name: deps
     path: /go
   commands:
-  - go build
+  - CGO_ENABLED=0 go build
 
 volumes:
-- name: deps
+- name: cache
   temp: {}
