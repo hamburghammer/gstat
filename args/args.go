@@ -2,6 +2,8 @@ package args
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/jessevdk/go-flags"
@@ -61,7 +63,12 @@ func Parse() Arguments {
 	_, err := flags.Parse(&args)
 
 	if err != nil {
-		panic(err)
+		if _, ok := err.(*flags.Error); ok {
+			os.Exit(1)
+		} else {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	}
 
 	return args
