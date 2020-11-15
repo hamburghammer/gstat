@@ -11,11 +11,11 @@ import (
 
 // Arguments represent the flags given at program start.
 type Arguments struct {
-	CPU       bool   `short:"c" long:"cpu" description:"Include the total CPU consumption"`
-	Mem       bool   `short:"m" long:"mem" description:"Include the total RAM consumption"`
-	Disk      bool   `short:"d" long:"disk" description:"Include the total CPU consumption"`
-	Processes bool   `short:"p" long:"proc" description:"Include the top 10 processes"`
-	Health    string `long:"health" description:"Make a healthcheck call against the URI"`
+	CPU       bool   `short:"c" long:"cpu" description:"Include the total CPU consumption."`
+	Mem       bool   `short:"m" long:"mem" description:"Include the RAM usage."`
+	Disk      bool   `short:"d" long:"disk" description:"Include the Disk usage."`
+	Processes bool   `short:"p" long:"proc" description:"Include the top 10 running processes with the highest CPU consumption."`
+	Health    string `long:"health" description:"Make a healthcheck call against the URI."`
 	rest      []string
 }
 
