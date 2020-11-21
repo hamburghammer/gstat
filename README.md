@@ -40,6 +40,8 @@ Application Options:
 Help Options:
   -h, --help    Show this help message
 ```
+*not all flags a jet supported or fully implemented!
+
 example output:
 
 
