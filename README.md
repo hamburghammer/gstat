@@ -6,7 +6,7 @@
 Is a cli tool to get some system stats in a machine parsable format (JSON). It supports only Linux but might also run on some UNIX based operation systems.
 
 
-This tool is part of a competition with [nhh](https://github.com/nhh) -> [Details](docs/completion.md)
+This tool is part of a competition with [nhh](https://github.com/nhh) -> [Details](docs/competition.md)
 
 **WIP: expect some changes for the stats gathering**
 
