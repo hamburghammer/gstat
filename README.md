@@ -3,65 +3,47 @@
 [![Build Status](https://cloud.drone.io/api/badges/hamburghammer/gstat/status.svg?ref=refs/heads/master)](https://cloud.drone.io/hamburghammer/gstat)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hamburghammer/gstat)](https://goreportcard.com/report/github.com/hamburghammer/gstat)
 
-Is a tool to get the system stats in a parsable format.
-The tool is part of the competition with [Niklas](https://github.com/nhh).
+Is a cli tool to get some system stats in a machine parsable format (JSON). It supports only Linux but might also run on some UNIX based operation systems.
 
-Checkout his solution: [cstat](https://github.com/nhh/cstat)
 
-## Terms of the competition
+This tool is part of a competition with [nhh](https://github.com/nhh) -> [Details](docs/completion.md)
 
-### Allgemein:
+**WIP: expect some changes for the stats gathering**
 
-Name des Programms: 
-    - cstat 
-    - gstat
+## Features
+- Easy to use
+- Single executable
+- Runs on Linux
 
-Das Tool kann mehrere Metriken auf einmal zurückgeben.
+## Installation
+For the time there are no binaries provided this means you need to install it through go.
 
-### Anforderung:
+Requirements:
+- Go is installed.
+- You have the `$GOPATH` defined.
+- The `$GOPATH/bin` directory is in your `$PATH`.
 
-    - Aktuelle CPU Auslastung
-    - Gesamtverbrauch aller CPU Kerne in %
-    - Die nach cpu sortierten Prozesse als Liste
-    - Aktueller Speicherplatzverbrauch
-        -used / free in megabyte
-    - Aktueller RAM Verbrauch
-        - used / free in megabyte
-    - Healthchecks mit Latency
-        - http / https / *ICMP*
-        - GET /
-    - *Aktueller Network IO (optional)*
-    - *Disk IO (optional)*
-    - JSON Output
-    - Datum und Uhrzeit im ISO Format
+Install and update it with `go get -u github.com/hamburghammer/gstat`.
 
-### Kriterien:
+## Usage
+```
+Usage:
+  gstat [OPTIONS]
 
-    - Single Executable
-    - Linux
+Application Options:
+  -c, --cpu     Include the total CPU consumption.
+  -m, --mem     Include the RAM usage.
+  -d, --disk    Include the Disk usage.
+  -p, --proc    Include the top 10 running processes with the highest CPU consumption.
+      --health= Make a healthcheck call against the URI.
 
-### Bewertungs:
+Help Options:
+  -h, --help    Show this help message
+```
+example output:
 
-1. Wie groß ist das Binary
-2. Performance von Befehlen
-3. Cpu Auslastung
-4. Ram Auslastung
 
-### Kommandozeilenaufrufe:
-
-Alphabetische Reihenfolge
-
--c -h -d // --healtheck=http://example.com --disk --format=json
-
-[https://de.wikipedia.org/wiki/Uniform_Resource_Identifier](https://de.wikipedia.org/wiki/Uniform_Resource_Identifier)
-
-`$ cstat/gstat --cpu --format=json`
-`$ cstat/gstat --metric=disk`
-`$ cstat/gstat --check`
-
-#### Goals:
-
-cstat/gstat -c -d -i -h https://my-server.com > log.json
-
-curl -X POST -d $(cstat/gstat -c -d -i -h https://my-server.com) https://my-logging.com/logs
-
+`gstat -cmd`
+```json
+{"Date":"2020-11-21T16:32:18+01:00","CPU":3.49999999997029,"mem":{"used":5777,"total":16022},"disk":{"used":90319,"total":224323}}
+```
