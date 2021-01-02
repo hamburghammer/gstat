@@ -25,13 +25,22 @@ func NewCPU() CPU {
 
 // Exec gets the cpu value and maps it to the executiondata struct
 func (c CPU) Exec(args args.Arguments) ([]byte, error) {
+	total, err := c.PureExec(args)
+	if err != nil {
+		return []byte{}, err
+	}
+	data := struct{ CPU float64 }{CPU: total}
+	return json.Marshal(data)
+}
+
+func (c CPU) PureExec(args args.Arguments) (float64, error) {
 	if !args.CPU {
-		return []byte{}, nil
+		return 0, nil
 	}
 	total, err := c.ReadCPUStat(time.Millisecond*time.Duration(c.TimeInMilSec), false)
 	if err != nil {
-		return []byte{}, errors.BaseError{Operation: OperationKeyCPUReading, Message: err.Error()}
+		return 0, errors.BaseError{Operation: OperationKeyCPUReading, Message: err.Error()}
 	}
-	data := struct{ CPU float64 }{CPU: total[0]}
-	return json.Marshal(data)
+
+	return total[0], nil
 }

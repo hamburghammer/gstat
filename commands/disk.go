@@ -19,17 +19,26 @@ func NewDisk() Disk {
 
 // Exec gets the disk space value for the root partition and maps it to the executiondata struct
 func (d Disk) Exec(args args.Arguments) ([]byte, error) {
+	memory, err := d.PureExec(args)
+	if err != nil {
+		return []byte{}, err
+	}
+	data := struct {
+		Disk Memory `json:"disk"`
+	}{Disk: memory}
+	return json.Marshal(data)
+}
+
+func (d Disk) PureExec(args args.Arguments) (Memory, error) {
 	if !args.Disk {
-		return []byte{}, nil
+		return Memory{}, nil
 	}
 
 	usage, err := d.ReadDiskStats("/")
 	if err != nil {
-		return []byte{}, err
+		return Memory{}, err
 	}
 
-	data := struct {
-		Disk Memory `json:"disk"`
-	}{Disk: Memory{Used: bytesToMegaByte(usage.Used), Total: bytesToMegaByte(usage.Total)}}
-	return json.Marshal(data)
+	memory := Memory{Used: bytesToMegaByte(usage.Used), Total: bytesToMegaByte(usage.Total)}
+	return memory, nil
 }

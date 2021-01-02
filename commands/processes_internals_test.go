@@ -9,7 +9,7 @@ import (
 
 func TestByCPULen(t *testing.T) {
 	t.Run("three item inside the array", func(t *testing.T) {
-		array := []cpuProcess{{}, {}, {}}
+		array := []CPUProcess{{}, {}, {}}
 		got := byCPU(array).Len()
 		want := 3
 
@@ -17,7 +17,7 @@ func TestByCPULen(t *testing.T) {
 	})
 
 	t.Run("one item inside the array", func(t *testing.T) {
-		array := []cpuProcess{{}}
+		array := []CPUProcess{{}}
 		got := byCPU(array).Len()
 		want := 1
 
@@ -25,7 +25,7 @@ func TestByCPULen(t *testing.T) {
 	})
 
 	t.Run("empty array", func(t *testing.T) {
-		array := []cpuProcess{}
+		array := []CPUProcess{}
 		got := byCPU(array).Len()
 		want := 0
 
@@ -35,8 +35,8 @@ func TestByCPULen(t *testing.T) {
 
 func TestByCPUSwap(t *testing.T) {
 	t.Run("swap array items", func(t *testing.T) {
-		unswaped := []cpuProcess{{Name: "foo"}, {Name: "bar"}}
-		swaped := []cpuProcess{{Name: "bar"}, {Name: "foo"}}
+		unswaped := []CPUProcess{{Name: "foo"}, {Name: "bar"}}
+		swaped := []CPUProcess{{Name: "bar"}, {Name: "foo"}}
 
 		got := byCPU(unswaped)
 		got.Swap(0, 1)
@@ -47,7 +47,7 @@ func TestByCPUSwap(t *testing.T) {
 }
 
 func TestByCPULess(t *testing.T) {
-	cpuProcessArray := []cpuProcess{{CPU: 1}, {CPU: 2}}
+	cpuProcessArray := []CPUProcess{{CPU: 1}, {CPU: 2}}
 
 	t.Run("less on cpu field smaller", func(t *testing.T) {
 
@@ -73,7 +73,7 @@ func TestGetProcessCPUInfos(t *testing.T) {
 		process := Process{Pid: 1, Name: nameFunc, CPUPercent: cpuProcessFunc}
 
 		got, err := getProcessCPUInfos(&process)
-		want := &cpuProcess{Name: "foo", Pid: 1, CPU: 0}
+		want := &CPUProcess{Name: "foo", Pid: 1, CPU: 0}
 
 		assert.Nil(t, err, "No error expected")
 		assert.Equal(t, want, got)
@@ -117,7 +117,7 @@ func TestGetProcessesCPUInfos(t *testing.T) {
 	t.Run("transform array of process into an array of cpuProcess", func(t *testing.T) {
 		processes := []*Process{{Pid: 2, Name: nameFunc, CPUPercent: cpuProcessFunc}, {Pid: 1, Name: nameFunc, CPUPercent: cpuProcessFunc}}
 		got, gotErr := getProcessesCPUInfos(processes)
-		want := []cpuProcess{{Name: "foo", CPU: 0, Pid: 2}, {Name: "foo", CPU: 0, Pid: 1}}
+		want := []CPUProcess{{Name: "foo", CPU: 0, Pid: 2}, {Name: "foo", CPU: 0, Pid: 1}}
 
 		assert.Nil(t, gotErr, "No error expected")
 		assert.Equal(t, want, got)
@@ -126,7 +126,7 @@ func TestGetProcessesCPUInfos(t *testing.T) {
 	t.Run("return error directly if one happens", func(t *testing.T) {
 		processes := []*Process{{Pid: 2, Name: nameFunc, CPUPercent: cpuProcessFunc}, {Pid: 1, Name: nameErrFunc, CPUPercent: cpuProcessFunc}}
 		got, gotErr := getProcessesCPUInfos(processes)
-		want := []cpuProcess{{Name: "foo", CPU: 0, Pid: 2}}
+		want := []CPUProcess{{Name: "foo", CPU: 0, Pid: 2}}
 		wantErr := err
 
 		assert.NotNil(t, gotErr, "an error was expected")

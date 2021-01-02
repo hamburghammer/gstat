@@ -15,25 +15,33 @@ type Processes struct {
 
 // Exec is the implementation of the execution interface to be able to be used as a command
 func (p Processes) Exec(args args.Arguments) ([]byte, error) {
+	processes, err := p.PureExec(args)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	data := struct{ Processes []CPUProcess }{Processes: processes}
+	return json.Marshal(data)
+}
+
+func (p Processes) PureExec(args args.Arguments) ([]CPUProcess, error) {
 	if !args.Processes {
-		return []byte{}, nil
+		return []CPUProcess{}, nil
 	}
 
 	processes, err := p.ReadProcesses()
 	if err != nil {
-		return []byte{}, err
+		return []CPUProcess{}, err
 	}
 
 	processesWithCPU, err := getProcessesCPUInfos(processes)
 	if err != nil {
-		return []byte{}, err
+		return []CPUProcess{}, err
 	}
 
 	sort.Sort(byCPU(processesWithCPU))
 
-	data := struct{ Processes []cpuProcess }{Processes: getFirstTenOrLess(processesWithCPU)}
-	return json.Marshal(data)
-
+	return getFirstTenOrLess(processesWithCPU), nil
 }
 
 // NewProcesses is a factory ctor to build a Processes struct
@@ -54,15 +62,15 @@ func getProcesses() ([]*Process, error) {
 	return p, err
 }
 
-func getFirstTenOrLess(array []cpuProcess) []cpuProcess {
+func getFirstTenOrLess(array []CPUProcess) []CPUProcess {
 	if len(array) >= 9 {
 		return array[0:10]
 	}
 	return array
 }
 
-func getProcessesCPUInfos(processes []*Process) ([]cpuProcess, error) {
-	processesWithCPU := make([]cpuProcess, 0, len(processes))
+func getProcessesCPUInfos(processes []*Process) ([]CPUProcess, error) {
+	processesWithCPU := make([]CPUProcess, 0, len(processes))
 	for _, process := range processes {
 		processCPUInfo, err := getProcessCPUInfos(process)
 		if err != nil {
@@ -73,25 +81,25 @@ func getProcessesCPUInfos(processes []*Process) ([]cpuProcess, error) {
 	return processesWithCPU, nil
 }
 
-func getProcessCPUInfos(process *Process) (*cpuProcess, error) {
+func getProcessCPUInfos(process *Process) (*CPUProcess, error) {
 	cpuPercent, err := process.CPUPercent()
 	if err != nil {
-		return &cpuProcess{}, err
+		return &CPUProcess{}, err
 	}
 	name, err := process.Name()
 	if err != nil {
-		return &cpuProcess{}, err
+		return &CPUProcess{}, err
 	}
-	return &cpuProcess{Pid: process.Pid, CPU: cpuPercent, Name: name}, nil
+	return &CPUProcess{Pid: process.Pid, CPU: cpuPercent, Name: name}, nil
 }
 
-type cpuProcess struct {
+type CPUProcess struct {
 	Name string
 	Pid  int32
 	CPU  float64
 }
 
-type byCPU []cpuProcess
+type byCPU []CPUProcess
 
 func (c byCPU) Len() int           { return len(c) }
 func (c byCPU) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }

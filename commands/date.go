@@ -22,8 +22,12 @@ func NewDate() Date {
 
 // Exec is the implementation of the execution interface for the Date struct.
 func (d Date) Exec(args args.Arguments) ([]byte, error) {
-	data := struct{ Date string }{Date: d.GetTime()}
+	data := struct{ Date string }{Date: d.PureExec(args)}
 	return json.Marshal(data)
+}
+
+func (d Date) PureExec(args.Arguments) string {
+	return d.GetTime()
 }
 
 func getFormattedTime() string {
